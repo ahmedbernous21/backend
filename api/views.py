@@ -11,10 +11,12 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from django.http import HttpResponse
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -24,24 +26,29 @@ class RegisterView(generics.CreateAPIView):
 
 # Get All Routes
 
-@api_view(['GET'])
+# api/views.py
+
+
+def home(request):
+    return HttpResponse("Welcome to the API homepage.")
+
+
+@api_view(["GET"])
 def getRoutes(request):
-    routes = [
-        '/api/token/',
-        '/api/register/',
-        '/api/token/refresh/'
-    ]
+    routes = ["/api/token/", "/api/register/", "/api/token/refresh/"]
     return Response(routes)
 
 
-@api_view(['GET', 'POST'])
+@api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
 def testEndPoint(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         data = f"Congratulation {request.user}, your API just responded to GET request"
-        return Response({'response': data}, status=status.HTTP_200_OK)
-    elif request.method == 'POST':
+        return Response({"response": data}, status=status.HTTP_200_OK)
+    elif request.method == "POST":
         text = "Hello buddy"
-        data = f'Congratulation your API just responded to POST request with text: {text}'
-        return Response({'response': data}, status=status.HTTP_200_OK)
+        data = (
+            f"Congratulation your API just responded to POST request with text: {text}"
+        )
+        return Response({"response": data}, status=status.HTTP_200_OK)
     return Response({}, status.HTTP_400_BAD_REQUEST)
