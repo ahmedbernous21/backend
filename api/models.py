@@ -15,13 +15,14 @@ class User(AbstractUser):
     
 class Profile(models.Model):
         user = models.OneToOneField(User, on_delete=models.CASCADE)
-        full_name = models.CharField(max_length=255)
+        first_name = models.CharField(max_length=255)
+        last_name = models.CharField(max_length=255)
         bio =  models.CharField(max_length=255)
         avatar = models.ImageField(default='default.png', upload_to='avatars/', null=True, blank=True)
         verified = models.BooleanField(default=False)
 
         def __str__(self):
-            return self.full_name
+            return self.first_name
 
 
 def create_user_profile(sender, instance, created, **kwargs):

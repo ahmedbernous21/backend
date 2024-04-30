@@ -19,11 +19,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         
         # These are claims, you can add custom claims
-        token['full_name'] = user.profile.full_name
+        token['first_name'] = user.profile.first_name
+        token['last_name'] = user.profile.last_name
         token['username'] = user.username
         token['email'] = user.email
         token['bio'] = user.profile.bio
-        token['image'] = str(user.profile.image)
+        token['avatar'] = str(user.profile.avatar)
         token['verified'] = user.profile.verified
         # ...
         return token
@@ -35,7 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'password2')
+        fields = ('email', 'first_name', 'last_name', 'password', 'password2')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
