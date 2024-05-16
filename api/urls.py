@@ -12,4 +12,9 @@ urlpatterns = [
     path("test/", views.testEndPoint, name="test"),
     path("", views.getRoutes),
     path("submit-form/", views.handle_contact_form, name="submit_form"),
+    path(
+        "send-response/<int:message_id>/",
+        views.send_response_email,
+        name="send_response_email",
+    ),
 ]

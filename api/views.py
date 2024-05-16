@@ -13,7 +13,7 @@ from rest_framework.decorators import api_view, permission_classes
 from api.models import User, ContactMessage
 
 from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 import json
 
@@ -82,8 +82,9 @@ def handle_contact_form(request):
 
 
 def send_response_email(request, message_id):
+    message = get_object_or_404(ContactMessage, pk=message_id)
+
     if request.method == "POST":
-        message = get_object_or_404(ContactMessage, pk=message_id)
         response = request.POST.get("response")
 
         send_mail(
@@ -99,4 +100,4 @@ def send_response_email(request, message_id):
 
         return JsonResponse({"message": "Response sent successfully!"})
     else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
+        return render(request, "response_form.html")
