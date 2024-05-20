@@ -1,5 +1,5 @@
 from django.contrib import admin
-from api.models import User, Profile, ContactMessage
+from api.models import User, Profile, ContactMessage, BloodFormSubmission
 from django.utils.html import format_html
 from django.urls import reverse, path
 from django.shortcuts import render, redirect, get_object_or_404
@@ -57,6 +57,38 @@ class ContactMessageAdmin(admin.ModelAdmin):
             return render(request, "response_form.html", context)
 
 
+class BloodFormSubmissionAdmin(admin.ModelAdmin):
+    list_display = (
+        "first_name",
+        "last_name",
+        "email",
+        "address",
+        "phone",
+        "appointment_date",
+        "message",
+        "prescription",
+    )
+    search_fields = ("first_name", "last_name", "email", "phone")
+    list_filter = ("appointment_date",)
+    readonly_fields = (
+        "first_name",
+        "last_name",
+        "email",
+        "address",
+        "phone",
+        "appointment_date",
+        "message",
+        "prescription",
+    )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+admin.site.register(BloodFormSubmission, BloodFormSubmissionAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(ContactMessage, ContactMessageAdmin)

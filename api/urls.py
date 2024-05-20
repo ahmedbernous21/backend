@@ -1,9 +1,7 @@
 from django.urls import path
 from . import views
 
-from rest_framework_simplejwt.views import (
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path("token/", views.MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -17,4 +15,5 @@ urlpatterns = [
         views.send_response_email,
         name="send_response_email",
     ),
+    path("submit-blood-form/", views.submit_blood_form, name="submit_blood_form"),
 ]

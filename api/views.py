@@ -1,7 +1,14 @@
 from django.http import JsonResponse
 from django.http import HttpResponse
 
-from api.serializer import MyTokenObtainPairSerializer, RegisterSerializer
+from api.serializer import (
+    MyTokenObtainPairSerializer,
+    RegisterSerializer,
+)
+from .models import BloodFormSubmission
+
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
 
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -101,3 +108,38 @@ def send_response_email(request, message_id):
         return JsonResponse({"message": "Response sent successfully!"})
     else:
         return render(request, "response_form.html")
+
+
+@api_view(["POST", "GET"])
+def submit_blood_form(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+        first_name = data.get("firstName")
+        last_name = data.get("lastName")
+        email = data.get("email")
+        address = data.get("address")
+        phone = data.get("phone")
+        appointment_date = data.get("appointmentDate")
+        message = data.get("message")
+
+        print("message", message)
+        print("first_name", first_name)
+
+        prescription = None
+        if "prescription" in request.FILES:
+            prescription = request.FILES["prescription"]
+
+        BloodFormSubmission.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            address=address,
+            phone=phone,
+            appointment_date=appointment_date,
+            message=message,
+            prescription=prescription,
+        )
+
+        return JsonResponse({"message": "Form submitted successfully!"}, status=201)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)

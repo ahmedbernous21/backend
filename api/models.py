@@ -48,3 +48,17 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BloodFormSubmission(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    address = models.CharField(max_length=255)
+    phone = models.CharField(max_length=15)
+    email = models.EmailField()
+    appointment_date = models.DateTimeField()
+    message = models.TextField()
+    prescription = models.FileField(upload_to="prescriptions/", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
