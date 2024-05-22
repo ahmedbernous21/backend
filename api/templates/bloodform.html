@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% extends "admin/change_form.html" %} {% block fieldsets %} {{ block.super }}
+<fieldset class="module aligned">
+  <legend>Prescription</legend>
+  {% if original.prescription %}
+  <img
+    src="{{ original.prescription.url }}"
+    alt="Prescription Image"
+    style="max-width: 200px; max-height: 200px"
+  />
+  {% else %}
+  <p>No prescription uploaded</p>
+  {% endif %}
+</fieldset>
+{% endblock %}

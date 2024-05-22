@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django.urls import reverse, path
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from .models import File, Test, Categorie, FAQ, Specialite, Coordonnees, RendezVous
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -86,6 +87,60 @@ class BloodFormSubmissionAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def display_prescription(self, obj):
+        if obj.prescription:
+            return '<img src="%s" width="100" />' % obj.prescription.url
+        else:
+            return "(No prescription)"
+
+    display_prescription.allow_tags = True
+
+
+@admin.register(File)
+class FileAdmin(admin.ModelAdmin):
+    list_display = ("fileID", "filePath")
+    search_fields = ("filePath",)
+
+
+@admin.register(Test)
+class TestAdmin(admin.ModelAdmin):
+    list_display = ("testID", "testName")
+    search_fields = ("testName",)
+
+
+@admin.register(Categorie)
+class CategorieAdmin(admin.ModelAdmin):
+    list_display = ("categoryID", "categoryName", "description")
+    search_fields = ("categoryName",)
+    list_filter = ("categoryName",)
+
+
+@admin.register(FAQ)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ("faqID", "question", "answer", "category")
+    search_fields = ("question", "answer")
+    list_filter = ("category",)
+
+
+@admin.register(Specialite)
+class SpecialiteAdmin(admin.ModelAdmin):
+    list_display = ("specialtyID", "name", "description")
+    search_fields = ("name",)
+    list_filter = ("name",)
+
+
+@admin.register(Coordonnees)
+class CoordonneesAdmin(admin.ModelAdmin):
+    list_display = ("adresseLab", "telephoneLab", "emailLab")
+    search_fields = ("adresseLab", "telephoneLab", "emailLab")
+
+
+@admin.register(RendezVous)
+class RendezVousAdmin(admin.ModelAdmin):
+    list_display = ("appointmentID", "date", "prescription")
+    search_fields = ("date",)
+    list_filter = ("date",)
 
 
 admin.site.register(BloodFormSubmission, BloodFormSubmissionAdmin)

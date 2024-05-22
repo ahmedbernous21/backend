@@ -62,3 +62,68 @@ class BloodFormSubmission(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class File(models.Model):
+    fileID = models.AutoField(primary_key=True)
+    filePath = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.filePath
+
+
+class Test(models.Model):
+    testID = models.AutoField(primary_key=True)
+    testName = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.testName
+
+
+class Categorie(models.Model):
+    categoryID = models.AutoField(primary_key=True)
+    categoryName = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.categoryName
+
+
+class FAQ(models.Model):
+    faqID = models.AutoField(primary_key=True)
+    question = models.TextField()
+    answer = models.TextField()
+    category = models.ForeignKey(Categorie, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.question
+
+
+class Specialite(models.Model):
+    specialtyID = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class Coordonnees(models.Model):
+    adresseLab = models.CharField(max_length=255)
+    telephoneLab = models.CharField(max_length=15)
+    emailLab = models.EmailField()
+
+    def __str__(self):
+        return self.adresseLab
+
+
+class RendezVous(models.Model):
+    appointmentID = models.AutoField(primary_key=True)
+    date = models.DateTimeField()
+    prescription = models.ImageField(upload_to="prescriptions/")
+
+    def __str__(self):
+        return f"Appointment on {self.date}"
+
+    class Meta:
+        verbose_name_plural = "RendezVous"
