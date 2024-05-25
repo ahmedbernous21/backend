@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from django.urls import reverse, path
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import File, Test, Categorie, FAQ, Specialite, Coordonnees, RendezVous
+from .models import File, Test, Categorie, FAQ, Specialite, ContactInfo, RendezVous
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -130,8 +130,8 @@ class SpecialiteAdmin(admin.ModelAdmin):
     list_filter = ("name",)
 
 
-@admin.register(Coordonnees)
-class CoordonneesAdmin(admin.ModelAdmin):
+@admin.register(ContactInfo)
+class ContactInfoAdmin(admin.ModelAdmin):
     list_display = ("adresseLab", "telephoneLab", "emailLab")
     search_fields = ("adresseLab", "telephoneLab", "emailLab")
 

@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+
 
 
 class User(AbstractUser):
@@ -51,6 +53,7 @@ class ContactMessage(models.Model):
 
 
 class BloodFormSubmission(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     address = models.CharField(max_length=255)
@@ -108,7 +111,7 @@ class Specialite(models.Model):
         return self.name
 
 
-class Coordonnees(models.Model):
+class ContactInfo(models.Model):
     adresseLab = models.CharField(max_length=255)
     telephoneLab = models.CharField(max_length=15)
     emailLab = models.EmailField()

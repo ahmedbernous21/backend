@@ -1,7 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-
+from rest_framework.routers import DefaultRouter
+from .views import ContactInfoViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
+
+router = DefaultRouter()
+router.register(r'contact-info', ContactInfoViewSet)
+
 
 urlpatterns = [
     path("token/", views.MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -16,4 +21,6 @@ urlpatterns = [
         name="send_response_email",
     ),
     path("submit-blood-form/", views.submit_blood_form, name="submit_blood_form"),
+    path('', include(router.urls)),
+
 ]

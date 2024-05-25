@@ -1,11 +1,15 @@
 from django.http import JsonResponse
 from django.http import HttpResponse
+from rest_framework import viewsets
 
 from api.serializer import (
     MyTokenObtainPairSerializer,
     RegisterSerializer,
+    ContactInfoSerializer
+
 )
-from .models import BloodFormSubmission
+
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
@@ -16,8 +20,10 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.authentication import TokenAuthentication  # Or use your authentication method
 
-from api.models import User, ContactMessage
+
+from api.models import User, ContactMessage, BloodFormSubmission, ContactInfo
 
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
@@ -109,8 +115,9 @@ def send_response_email(request, message_id):
     else:
         return render(request, "response_form.html")
 
-
 @api_view(["POST", "GET"])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])  # Adjust based on your authentication method
 def submit_blood_form(request):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
@@ -130,6 +137,7 @@ def submit_blood_form(request):
             prescription = request.FILES["prescription"]
 
         BloodFormSubmission.objects.create(
+            user=request.user,
             first_name=first_name,
             last_name=last_name,
             email=email,
@@ -143,3 +151,8 @@ def submit_blood_form(request):
         return JsonResponse({"message": "Form submitted successfully!"}, status=201)
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+class ContactInfoViewSet(viewsets.ModelViewSet):
+    queryset = ContactInfo.objects.all()
+    serializer_class = ContactInfoSerializer
