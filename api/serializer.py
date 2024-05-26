@@ -1,4 +1,4 @@
-from api.models import User, BloodFormSubmission, ContactInfo
+from api.models import User, BloodFormSubmission, ContactInfo, File, Test, Faq, Category, Specialty
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
@@ -70,3 +70,35 @@ class ContactInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactInfo
         fields = '__all__'
+
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = File
+        fields = ['id', 'test', 'file', 'description']
+
+class TestSerializer(serializers.ModelSerializer):
+    files = FileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Test
+        fields = ['id', 'name', 'description', 'files']
+
+class FaqSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Faq
+        fields = '__all__'
+
+class CategorySerializer(serializers.ModelSerializer):
+    faqs = FaqSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+
+
+class SpecialtySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specialty
+        fields = ['id', 'name', 'description', 'image']

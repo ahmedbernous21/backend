@@ -67,45 +67,45 @@ class BloodFormSubmission(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
-class File(models.Model):
-    fileID = models.AutoField(primary_key=True)
-    filePath = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.filePath
-
-
 class Test(models.Model):
-    testID = models.AutoField(primary_key=True)
-    testName = models.CharField(max_length=255)
+    name = models.CharField(max_length=100)
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.testName
+        return self.name 
 
-
-class Categorie(models.Model):
-    categoryID = models.AutoField(primary_key=True)
-    categoryName = models.CharField(max_length=255)
-    description = models.TextField()
-
-    def __str__(self):
-        return self.categoryName
-
-
-class FAQ(models.Model):
-    faqID = models.AutoField(primary_key=True)
-    question = models.TextField()
-    answer = models.TextField()
-    category = models.ForeignKey(Categorie, on_delete=models.CASCADE)
+class File(models.Model):
+    test = models.ForeignKey(Test, related_name='files', on_delete=models.CASCADE, null=True, blank=True)
+    file = models.FileField(upload_to='test_files/', default='test_files/ECBU.pdf')
+    description = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return self.question
+        return self.file.name
+
+  
 
 
-class Specialite(models.Model):
-    specialtyID = models.AutoField(primary_key=True)
+class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    image = models.ImageField(upload_to='category_images/', )
+
+    def __str__(self):
+        return self.name
+
+class Faq(models.Model):
+    category = models.ForeignKey(Category, related_name='faqs', on_delete=models.CASCADE)
+    question_text = models.TextField()
+    answer_text = models.TextField()
+
+    def __str__(self):
+        return self.question_text
+
+
+class Specialty(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to='specialties/')
 
     def __str__(self):
         return self.name

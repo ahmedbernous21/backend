@@ -1,10 +1,10 @@
 from django.contrib import admin
-from api.models import User, Profile, ContactMessage, BloodFormSubmission
+from api.models import User, Profile, ContactMessage, BloodFormSubmission, File, Test
 from django.utils.html import format_html
 from django.urls import reverse, path
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import File, Test, Categorie, FAQ, Specialite, ContactInfo, RendezVous
+from .models import   Specialty, ContactInfo, RendezVous, Category, Faq
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -97,37 +97,33 @@ class BloodFormSubmissionAdmin(admin.ModelAdmin):
     display_prescription.allow_tags = True
 
 
-@admin.register(File)
-class FileAdmin(admin.ModelAdmin):
-    list_display = ("fileID", "filePath")
-    search_fields = ("filePath",)
-
-
 @admin.register(Test)
 class TestAdmin(admin.ModelAdmin):
-    list_display = ("testID", "testName")
-    search_fields = ("testName",)
+    list_display = ('name', 'description')
+
+@admin.register(File)
+class FileAdmin(admin.ModelAdmin):
+    list_display = ('test', 'file', 'description')
 
 
-@admin.register(Categorie)
-class CategorieAdmin(admin.ModelAdmin):
-    list_display = ("categoryID", "categoryName", "description")
-    search_fields = ("categoryName",)
-    list_filter = ("categoryName",)
+class FaqInline(admin.TabularInline):
+    model = Faq
+    extra = 1
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    inlines = [FaqInline]
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Faq)
 
 
-@admin.register(FAQ)
-class FAQAdmin(admin.ModelAdmin):
-    list_display = ("faqID", "question", "answer", "category")
-    search_fields = ("question", "answer")
-    list_filter = ("category",)
-
-
-@admin.register(Specialite)
-class SpecialiteAdmin(admin.ModelAdmin):
-    list_display = ("specialtyID", "name", "description")
-    search_fields = ("name",)
-    list_filter = ("name",)
+@admin.register(Specialty)
+class SpecialtyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    search_fields = ('name',)
+    list_filter = ('name',)
+    ordering = ('name',)
 
 
 @admin.register(ContactInfo)

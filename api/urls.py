@@ -3,9 +3,17 @@ from . import views
 from rest_framework.routers import DefaultRouter
 from .views import ContactInfoViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
+from .views import TestViewSet, FileViewSet, CategoryViewSet, FaqViewSet, SpecialtyViewSet
+
 
 router = DefaultRouter()
 router.register(r'contact-info', ContactInfoViewSet)
+router.register(r'tests', TestViewSet)
+router.register(r'files', FileViewSet)
+router.register(r'categories', CategoryViewSet)
+router.register(r'faqs', FaqViewSet)
+router.register(r'specialties', SpecialtyViewSet)
+
 
 
 urlpatterns = [
@@ -24,3 +32,4 @@ urlpatterns = [
     path('', include(router.urls)),
 
 ]
+

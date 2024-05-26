@@ -5,7 +5,12 @@ from rest_framework import viewsets
 from api.serializer import (
     MyTokenObtainPairSerializer,
     RegisterSerializer,
-    ContactInfoSerializer
+    ContactInfoSerializer,
+    TestSerializer,
+    FileSerializer,
+    CategorySerializer,
+    FaqSerializer,
+    SpecialtySerializer
 
 )
 
@@ -23,7 +28,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authentication import TokenAuthentication  # Or use your authentication method
 
 
-from api.models import User, ContactMessage, BloodFormSubmission, ContactInfo
+
+from api.models import User, ContactMessage, BloodFormSubmission, ContactInfo, Test, File, Category, Faq, Specialty
 
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
@@ -156,3 +162,24 @@ def submit_blood_form(request):
 class ContactInfoViewSet(viewsets.ModelViewSet):
     queryset = ContactInfo.objects.all()
     serializer_class = ContactInfoSerializer
+
+
+class TestViewSet(viewsets.ModelViewSet):
+    queryset = Test.objects.all()
+    serializer_class = TestSerializer
+
+class FileViewSet(viewsets.ModelViewSet):
+    queryset = File.objects.all()
+    serializer_class = FileSerializer
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class FaqViewSet(viewsets.ModelViewSet):
+    queryset = Faq.objects.all()
+    serializer_class = FaqSerializer
+
+class SpecialtyViewSet(viewsets.ModelViewSet):
+    queryset = Specialty.objects.all()
+    serializer_class = SpecialtySerializer
