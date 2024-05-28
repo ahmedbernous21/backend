@@ -12,27 +12,30 @@ from api.serializer import (
     FaqSerializer,
     SpecialtySerializer,
     BloodFormSubmissionSerializer,
-
 )
 
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view, permission_classes
 
-from django.views.decorators.csrf import csrf_exempt
-from django.core.files.storage import default_storage
 
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.authentication import TokenAuthentication  # Or use your authentication method
-from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
-
-from api.models import User, ContactMessage, BloodFormSubmission, ContactInfo, Test, File, Category, Faq, Specialty
+from api.models import (
+    User,
+    ContactMessage,
+    BloodFormSubmission,
+    ContactInfo,
+    Test,
+    File,
+    Category,
+    Faq,
+    Specialty,
+)
 
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, render
@@ -125,8 +128,6 @@ def send_response_email(request, message_id):
         return render(request, "response_form.html")
 
 
-
-
 class ContactInfoViewSet(viewsets.ModelViewSet):
     queryset = ContactInfo.objects.all()
     serializer_class = ContactInfoSerializer
@@ -136,21 +137,26 @@ class TestViewSet(viewsets.ModelViewSet):
     queryset = Test.objects.all()
     serializer_class = TestSerializer
 
+
 class FileViewSet(viewsets.ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileSerializer
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
 class FaqViewSet(viewsets.ModelViewSet):
     queryset = Faq.objects.all()
     serializer_class = FaqSerializer
 
+
 class SpecialtyViewSet(viewsets.ModelViewSet):
     queryset = Specialty.objects.all()
     serializer_class = SpecialtySerializer
+
 
 class BloodFormSubmissionViewSet(viewsets.ModelViewSet):
     queryset = BloodFormSubmission.objects.all()

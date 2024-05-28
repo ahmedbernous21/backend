@@ -3,20 +3,24 @@ from . import views
 from rest_framework.routers import DefaultRouter
 from .views import ContactInfoViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import TestViewSet, FileViewSet, CategoryViewSet, FaqViewSet, SpecialtyViewSet, BloodFormSubmissionViewSet
+from .views import (
+    TestViewSet,
+    FileViewSet,
+    CategoryViewSet,
+    FaqViewSet,
+    SpecialtyViewSet,
+    BloodFormSubmissionViewSet,
+)
 
 
 router = DefaultRouter()
-router.register(r'contact-info', ContactInfoViewSet)
-router.register(r'tests', TestViewSet)
-router.register(r'files', FileViewSet)
-router.register(r'categories', CategoryViewSet)
-router.register(r'faqs', FaqViewSet)
-router.register(r'specialties', SpecialtyViewSet)
-router.register(r'bloodformsubmissions', BloodFormSubmissionViewSet)
-
-
-
+router.register(r"contact-info", ContactInfoViewSet)
+router.register(r"tests", TestViewSet)
+router.register(r"files", FileViewSet)
+router.register(r"categories", CategoryViewSet)
+router.register(r"faqs", FaqViewSet)
+router.register(r"specialties", SpecialtyViewSet)
+router.register(r"bloodformsubmissions", BloodFormSubmissionViewSet)
 
 
 urlpatterns = [
@@ -31,7 +35,5 @@ urlpatterns = [
         views.send_response_email,
         name="send_response_email",
     ),
-    path('', include(router.urls)),
-
+    path("", include(router.urls)),
 ]
-
