@@ -102,3 +102,10 @@ class SpecialtySerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialty
         fields = ['id', 'name', 'description', 'image']
+
+
+
+class BloodFormSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BloodFormSubmission
+        fields = '__all__'

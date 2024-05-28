@@ -3,7 +3,7 @@ from . import views
 from rest_framework.routers import DefaultRouter
 from .views import ContactInfoViewSet
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import TestViewSet, FileViewSet, CategoryViewSet, FaqViewSet, SpecialtyViewSet
+from .views import TestViewSet, FileViewSet, CategoryViewSet, FaqViewSet, SpecialtyViewSet, BloodFormSubmissionView
 
 
 router = DefaultRouter()
@@ -13,6 +13,7 @@ router.register(r'files', FileViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'faqs', FaqViewSet)
 router.register(r'specialties', SpecialtyViewSet)
+
 
 
 
@@ -28,8 +29,8 @@ urlpatterns = [
         views.send_response_email,
         name="send_response_email",
     ),
-    path("submit-blood-form/", views.submit_blood_form, name="submit_blood_form"),
     path('', include(router.urls)),
+    path('blood-form-submissions/', BloodFormSubmissionView.as_view(), name='blood-form-submission'),
 
 ]
 

@@ -58,43 +58,10 @@ class ContactMessageAdmin(admin.ModelAdmin):
             return render(request, "response_form.html", context)
 
 
+@admin.register(BloodFormSubmission)
 class BloodFormSubmissionAdmin(admin.ModelAdmin):
-    list_display = (
-        "first_name",
-        "last_name",
-        "email",
-        "address",
-        "phone",
-        "appointment_date",
-        "message",
-        "prescription",
-    )
-    search_fields = ("first_name", "last_name", "email", "phone")
-    list_filter = ("appointment_date",)
-    readonly_fields = (
-        "first_name",
-        "last_name",
-        "email",
-        "address",
-        "phone",
-        "appointment_date",
-        "message",
-        "prescription",
-    )
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
-
-    def display_prescription(self, obj):
-        if obj.prescription:
-            return '<img src="%s" width="100" />' % obj.prescription.url
-        else:
-            return "(No prescription)"
-
-    display_prescription.allow_tags = True
+    list_display = ('first_name', 'last_name', 'email', 'appointment_date')
+    search_fields = ('first_name', 'last_name', 'email')
 
 
 @admin.register(Test)
@@ -139,7 +106,6 @@ class RendezVousAdmin(admin.ModelAdmin):
     list_filter = ("date",)
 
 
-admin.site.register(BloodFormSubmission, BloodFormSubmissionAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(ContactMessage, ContactMessageAdmin)

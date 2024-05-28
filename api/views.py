@@ -10,7 +10,8 @@ from api.serializer import (
     FileSerializer,
     CategorySerializer,
     FaqSerializer,
-    SpecialtySerializer
+    SpecialtySerializer,
+    BloodFormSubmissionSerializer,
 
 )
 
@@ -26,6 +27,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authentication import TokenAuthentication  # Or use your authentication method
+from rest_framework.views import APIView
 
 
 
@@ -121,42 +123,7 @@ def send_response_email(request, message_id):
     else:
         return render(request, "response_form.html")
 
-@api_view(["POST", "GET"])
-@permission_classes([IsAuthenticated])
-@authentication_classes([TokenAuthentication])  # Adjust based on your authentication method
-def submit_blood_form(request):
-    if request.method == "POST":
-        data = json.loads(request.body.decode("utf-8"))
-        first_name = data.get("firstName")
-        last_name = data.get("lastName")
-        email = data.get("email")
-        address = data.get("address")
-        phone = data.get("phone")
-        appointment_date = data.get("appointmentDate")
-        message = data.get("message")
 
-        print("message", message)
-        print("first_name", first_name)
-
-        prescription = None
-        if "prescription" in request.FILES:
-            prescription = request.FILES["prescription"]
-
-        BloodFormSubmission.objects.create(
-            user=request.user,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            address=address,
-            phone=phone,
-            appointment_date=appointment_date,
-            message=message,
-            prescription=prescription,
-        )
-
-        return JsonResponse({"message": "Form submitted successfully!"}, status=201)
-
-    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 class ContactInfoViewSet(viewsets.ModelViewSet):
@@ -183,3 +150,11 @@ class FaqViewSet(viewsets.ModelViewSet):
 class SpecialtyViewSet(viewsets.ModelViewSet):
     queryset = Specialty.objects.all()
     serializer_class = SpecialtySerializer
+
+class BloodFormSubmissionView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = BloodFormSubmissionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

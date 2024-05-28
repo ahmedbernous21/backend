@@ -53,7 +53,7 @@ class ContactMessage(models.Model):
 
 
 class BloodFormSubmission(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     address = models.CharField(max_length=255)
@@ -61,7 +61,7 @@ class BloodFormSubmission(models.Model):
     email = models.EmailField()
     appointment_date = models.DateTimeField()
     message = models.TextField()
-    prescription = models.FileField(upload_to="prescriptions/", blank=True, null=True)
+    prescription = models.ImageField(upload_to="prescriptions/", default="default.png")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
