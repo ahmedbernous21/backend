@@ -28,6 +28,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authentication import TokenAuthentication  # Or use your authentication method
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 
@@ -151,10 +152,11 @@ class SpecialtyViewSet(viewsets.ModelViewSet):
     queryset = Specialty.objects.all()
     serializer_class = SpecialtySerializer
 
-class BloodFormSubmissionView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = BloodFormSubmissionSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class BloodFormSubmissionViewSet(viewsets.ModelViewSet):
+    queryset = BloodFormSubmission.objects.all()
+    serializer_class = BloodFormSubmissionSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
