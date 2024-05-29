@@ -15,11 +15,12 @@ class ProfileAdmin(admin.ModelAdmin):
     list_editable = ["verified"]
     list_display = ["user", "full_name", "verified"]
 
-
 class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ["name", "email", "date_sent", "respond", "responded"]
     list_editable = ["responded"]
     search_fields = ["name", "email", "message"]
+    def get_readonly_fields(self, request, obj=None):
+        return [field.name for field in obj._meta.get_fields()]
 
     def respond(self, obj):
         if not obj.responded:
@@ -62,7 +63,19 @@ class ContactMessageAdmin(admin.ModelAdmin):
 class BloodFormSubmissionAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'appointment_date')
     search_fields = ('first_name', 'last_name', 'email')
-    readonly_fields = ('user','first_name', 'last_name', 'address', 'phone', 'email', 'appointment_date')
+
+    def display_file(self, obj):
+        if obj.prescription:
+            file_url = obj.prescription.url
+            if file_url.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+                return format_html('<img src="{}" width="100" height="100" />', file_url)
+            return format_html('<a href="{}" target="_blank">Download</a>', file_url)
+        return "No file"
+    display_file.short_description = 'File'
+
+    def get_readonly_fields(self, request, obj=None):
+        return [field.name for field in obj._meta.get_fields()]
+    
 
 
 @admin.register(Test)

@@ -13,6 +13,7 @@ from api.serializer import (
     SpecialtySerializer,
     BloodFormSubmissionSerializer,
     AppointmentSerializer,
+    ContactMessageSerializer,
 )
 
 from rest_framework.decorators import api_view, permission_classes
@@ -83,29 +84,15 @@ def testEndPoint(request):
         return Response({"response": data}, status=status.HTTP_200_OK)
     return Response({}, status.HTTP_400_BAD_REQUEST)
 
+    
+class ContactMessageViewSet(viewsets.ModelViewSet):
+    queryset =  ContactMessage.objects.all()
+    serializer_class = ContactMessageSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
-@api_view(["GET", "POST"])
-def handle_contact_form(request):
-    if request.method == "POST":
-        data = json.loads(request.body.decode("utf-8"))
-        name = data.get("name")
-        email = data.get("email")
-        phone = data.get("phone")
-        sujet = data.get("sujet")
-        message = data.get("message")
-        print("name", name)
-        print("email", email)
-        print("phone", phone)
-        print("sujet", sujet)
-        print("message", message)
-
-        ContactMessage.objects.create(
-            name=name, email=email, phone=phone, sujet=sujet, message=message
-        )
-
-        return JsonResponse({"message": "Form submitted successfully!"})
-    else:
-        return JsonResponse({"error": "Invalid request method"}, status=405)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 def send_response_email(request, message_id):

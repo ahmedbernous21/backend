@@ -40,6 +40,7 @@ post_save.connect(save_user_profile, sender=User)
 
 
 class ContactMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20, default="N/A")

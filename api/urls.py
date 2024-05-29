@@ -11,6 +11,7 @@ from .views import (
     SpecialtyViewSet,
     BloodFormSubmissionViewSet,
     AppointmentViewSet,
+    ContactMessageViewSet,
 )
 
 
@@ -23,6 +24,7 @@ router.register(r"faqs", FaqViewSet)
 router.register(r"specialties", SpecialtyViewSet)
 router.register(r"bloodformsubmissions", BloodFormSubmissionViewSet)
 router.register(r'appointments', AppointmentViewSet, basename='appointment')
+router.register(r"contact", ContactMessageViewSet)
 
 
 
@@ -32,7 +34,6 @@ urlpatterns = [
     path("register/", views.RegisterView.as_view(), name="auth_register"),
     path("test/", views.testEndPoint, name="test"),
     path("", views.getRoutes),
-    path("submit-form/", views.handle_contact_form, name="submit_form"),
     path(
         "send-response/<int:message_id>/",
         views.send_response_email,
