@@ -26,6 +26,15 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["verified"] = user.profile.verified
         # ...
         return token
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        
+        user = self.user
+        
+        if not user.is_confirmed:
+            raise serializers.ValidationError('Email not confirmed.')
+
+        return data
 
 
 class RegisterSerializer(serializers.ModelSerializer):
