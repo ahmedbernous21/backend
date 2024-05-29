@@ -25,8 +25,10 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str  # Use force_str here
+from django.contrib.auth.tokens import default_token_generator
+from .email import send_confirmation_email
 from api.models import (
     User,
     ContactMessage,
@@ -55,6 +57,10 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
+    def perform_create(self, serializer):
+        user = serializer.save()
+        send_confirmation_email(user)
+        return user
 
 # Get All Routes
 # api/views.py
@@ -163,3 +169,19 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class ConfirmUserEmailView(generics.GenericAPIView):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            user.is_confirmed = True
+            user.save()
+            return HttpResponse('Your email has been confirmed. You can now login.')
+        else:
+            return HttpResponse('The confirmation link is invalid or expired.')

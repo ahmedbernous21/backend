@@ -1,0 +1,14 @@
+<!-- templates/confirmation_email.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Your Email</title>
+</head>
+<body>
+    <p>Hi {{ user.username }},</p>
+    <p>Thank you for registering. Please click the link below to confirm your email address:</p>
+    <p><a href="{{ confirm_url }}">Confirm your email</a></p>
+    <p>If you did not register, please ignore this email.</p>
+</body>
+</html>

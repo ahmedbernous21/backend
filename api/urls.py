@@ -12,6 +12,7 @@ from .views import (
     BloodFormSubmissionViewSet,
     AppointmentViewSet,
     ContactMessageViewSet,
+	ConfirmUserEmailView
 )
 
 
@@ -40,4 +41,5 @@ urlpatterns = [
         name="send_response_email",
     ),
     path("", include(router.urls)),
+	path("confirm/<uidb64>/<token>/", ConfirmUserEmailView.as_view(), name='confirm_user_email'),
 ]
