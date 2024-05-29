@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.http import HttpResponse
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 
 from api.serializer import (
     MyTokenObtainPairSerializer,
@@ -12,6 +12,7 @@ from api.serializer import (
     FaqSerializer,
     SpecialtySerializer,
     BloodFormSubmissionSerializer,
+    AppointmentSerializer,
 )
 
 from rest_framework.decorators import api_view, permission_classes
@@ -35,6 +36,7 @@ from api.models import (
     Category,
     Faq,
     Specialty,
+    Appointment,
 )
 
 from django.core.mail import send_mail
@@ -163,6 +165,14 @@ class BloodFormSubmissionViewSet(viewsets.ModelViewSet):
     serializer_class = BloodFormSubmissionSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class AppointmentViewSet(viewsets.ModelViewSet):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

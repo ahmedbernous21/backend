@@ -120,13 +120,18 @@ class ContactInfo(models.Model):
         return self.adresseLab
 
 
-class RendezVous(models.Model):
-    appointmentID = models.AutoField(primary_key=True)
-    date = models.DateTimeField()
-    prescription = models.ImageField(upload_to="prescriptions/")
+class Appointment(models.Model):
+    patient_name = models.CharField(max_length=255)
+    test_name = models.CharField(max_length=255)
+    apt_notes = models.TextField(blank=True, null=True)
+    apt_date = models.DateField()
+    apt_time = models.TimeField()
+    apt_pres = models.FileField(upload_to='prescriptions/')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments', default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['apt_date', 'apt_time']
 
     def __str__(self):
-        return f"Appointment on {self.date}"
-
-    class Meta:
-        verbose_name_plural = "RendezVous"
+        return f"{self.patient_name} - {self.test_name} on {self.apt_date} at {self.apt_time}"

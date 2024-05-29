@@ -10,6 +10,7 @@ from .views import (
     FaqViewSet,
     SpecialtyViewSet,
     BloodFormSubmissionViewSet,
+    AppointmentViewSet,
 )
 
 
@@ -21,6 +22,8 @@ router.register(r"categories", CategoryViewSet)
 router.register(r"faqs", FaqViewSet)
 router.register(r"specialties", SpecialtyViewSet)
 router.register(r"bloodformsubmissions", BloodFormSubmissionViewSet)
+router.register(r'appointments', AppointmentViewSet, basename='appointment')
+
 
 
 urlpatterns = [

@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from django.urls import reverse, path
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import   Specialty, ContactInfo, RendezVous, Category, Faq
+from .models import   Specialty, ContactInfo,  Category, Faq, Appointment
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -62,6 +62,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
 class BloodFormSubmissionAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'appointment_date')
     search_fields = ('first_name', 'last_name', 'email')
+    readonly_fields = ('user','first_name', 'last_name', 'address', 'phone', 'email', 'appointment_date')
 
 
 @admin.register(Test)
@@ -99,11 +100,12 @@ class ContactInfoAdmin(admin.ModelAdmin):
     search_fields = ("adresseLab", "telephoneLab", "emailLab")
 
 
-@admin.register(RendezVous)
-class RendezVousAdmin(admin.ModelAdmin):
-    list_display = ("appointmentID", "date", "prescription")
-    search_fields = ("date",)
-    list_filter = ("date",)
+@admin.register(Appointment)
+class AppointmentAdmin(admin.ModelAdmin):
+    list_display = ('patient_name', 'test_name', 'apt_date', 'apt_time', 'created_at')
+    search_fields = ('patient_name', 'test_name', 'apt_notes')
+    list_filter = ('apt_date', 'apt_time')
+    ordering = ('-created_at',)
 
 
 admin.site.register(User, UserAdmin)
