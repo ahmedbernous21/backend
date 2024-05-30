@@ -125,15 +125,17 @@ class ContactInfo(models.Model):
 class Appointment(models.Model):
     patient_name = models.CharField(max_length=255)
     test_name = models.CharField(max_length=255)
+    email = models.EmailField()
     apt_notes = models.TextField(blank=True, null=True)
-    apt_date = models.DateField()
-    apt_time = models.TimeField()
+    apt_date = models.DateTimeField()
     apt_pres = models.FileField(upload_to='prescriptions/')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments', default=1)
     created_at = models.DateTimeField(auto_now_add=True)
+    confirmed = models.BooleanField(default=False)  # New field
+
     
     class Meta:
-        ordering = ['apt_date', 'apt_time']
+        ordering = ['apt_date']
 
     def __str__(self):
-        return f"{self.patient_name} - {self.test_name} on {self.apt_date} at {self.apt_time}"
+        return f"{self.patient_name} - {self.test_name} on {self.apt_date} by {self.user}"

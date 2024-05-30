@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Email Confirmation Failed</title>
+    <title>Échec de la Confirmation de l'Email</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -50,14 +50,16 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Échec de la confirmation par e-mail</h1>
+            <h1>Échec de la Confirmation de l'Email</h1>
         </div>
         <div class="content">
-            <p>Bonjour {{ user.username }},</p>
-            <p>Malheureusement, le lien de confirmation par e-mail que vous avez utilisé n'est pas valide ou a expiré.</p>
-            <a href="{{ confirm_url }}" class="button">Resend Confirmation Email</a>
+            <p>Bonjour,</p>
+            <p>Malheureusement, le lien de confirmation que vous avez utilisé est invalide ou a expiré.</p>
         </div>
-        
+        <div class="footer">
+            <p>Si vous avez des questions, veuillez contacter notre équipe de support.</p>
+        </div>
     </div>
 </body>
 </html>
+

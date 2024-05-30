@@ -115,9 +115,8 @@ class ContactInfoAdmin(admin.ModelAdmin):
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('patient_name', 'test_name', 'apt_date', 'apt_time', 'created_at')
+    list_display = ('patient_name', 'test_name', 'apt_date','created_at')
     search_fields = ('patient_name', 'test_name', 'apt_notes')
-    list_filter = ('apt_date', 'apt_time')
     ordering = ('-created_at',)
 
 
