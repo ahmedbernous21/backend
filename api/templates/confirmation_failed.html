@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Email Confirmation Failed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 40px auto;
+            border-radius: 8px;
+        }
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #f44336;
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #f44336;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Échec de la confirmation par e-mail</h1>
+        </div>
+        <div class="content">
+            <p>Bonjour {{ user.username }},</p>
+            <p>Malheureusement, le lien de confirmation par e-mail que vous avez utilisé n'est pas valide ou a expiré.</p>
+            <a href="{{ confirm_url }}" class="button">Resend Confirmation Email</a>
+        </div>
+        
+    </div>
+</body>
+</html>

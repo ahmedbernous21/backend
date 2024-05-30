@@ -182,6 +182,6 @@ class ConfirmUserEmailView(generics.GenericAPIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_confirmed = True
             user.save()
-            return HttpResponse('Your email has been confirmed. You can now login.')
+            return render(request, 'confirmation_success.html')
         else:
-            return HttpResponse('The confirmation link is invalid or expired.')
+            return render(request, 'confirmation_failed.html')
