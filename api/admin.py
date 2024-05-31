@@ -4,7 +4,9 @@ from django.utils.html import format_html
 from django.urls import reverse, path
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import   Specialty, ContactInfo,  Category, Faq, Appointment
+from .models import   Specialty, ContactInfo,  Category, Faq, Appointment, Resultat
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -118,6 +120,16 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_display = ('patient_name', 'test_name', 'apt_date','created_at')
     search_fields = ('patient_name', 'test_name', 'apt_notes')
     ordering = ('-created_at',)
+
+@receiver(post_save, sender=User)
+def create_user_result(sender, instance, created, **kwargs):
+    if created:
+        Resultat.objects.create(user=instance)
+
+@admin.register(Resultat)
+class ResultatAdmin(admin.ModelAdmin):
+    list_display = ('user', 'created_at', 'available')
+    search_fields = ('user', 'created_at')
 
 
 admin.site.register(User, UserAdmin)

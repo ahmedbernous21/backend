@@ -1,4 +1,4 @@
-from api.models import User, BloodFormSubmission, ContactInfo, File, Test, Faq, Category, Specialty, Appointment, ContactMessage
+from api.models import User, BloodFormSubmission, ContactInfo, File, Test, Faq, Category, Specialty, Appointment, ContactMessage,  Resultat
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
@@ -127,4 +127,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
 class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactMessage
+        fields = '__all__'
+
+class ResultatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resultat
         fields = '__all__'

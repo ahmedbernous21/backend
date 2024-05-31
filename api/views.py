@@ -14,9 +14,11 @@ from api.serializer import (
     BloodFormSubmissionSerializer,
     AppointmentSerializer,
     ContactMessageSerializer,
+    ResultatSerializer
 )
 
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.views import APIView
 
 
 from rest_framework.response import Response
@@ -40,6 +42,7 @@ from api.models import (
     Faq,
     Specialty,
     Appointment,
+    Resultat
 )
 
 from django.core.mail import send_mail
@@ -185,3 +188,10 @@ class ConfirmUserEmailView(generics.GenericAPIView):
             return render(request, 'confirmation_success.html')
         else:
             return render(request, 'confirmation_failed.html')
+        
+class ResultViewSet(viewsets.ModelViewSet):
+    serializer_class = ResultatSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Resultat.objects.filter(user=self.request.user)

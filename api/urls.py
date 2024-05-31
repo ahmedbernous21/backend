@@ -12,7 +12,9 @@ from .views import (
     BloodFormSubmissionViewSet,
     AppointmentViewSet,
     ContactMessageViewSet,
-	ConfirmUserEmailView
+	ConfirmUserEmailView,
+    ResultViewSet
+    
 )
 
 
@@ -26,6 +28,8 @@ router.register(r"specialties", SpecialtyViewSet)
 router.register(r"bloodformsubmissions", BloodFormSubmissionViewSet)
 router.register(r'appointments', AppointmentViewSet, basename='appointment')
 router.register(r"contact", ContactMessageViewSet)
+router.register(r'results', ResultViewSet, basename='result')
+
 
 
 
@@ -42,4 +46,5 @@ urlpatterns = [
     ),
     path("", include(router.urls)),
 	path("confirm/<uidb64>/<token>/", ConfirmUserEmailView.as_view(), name='confirm_user_email'),
+
 ]
