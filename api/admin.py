@@ -7,6 +7,8 @@ from django.contrib import messages
 from .models import   Specialty, ContactInfo,  Category, Faq, Appointment, Resultat
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.mail import send_mail, get_connection
+from django.conf import settings
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -21,8 +23,6 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ["name", "email", "date_sent", "respond", "responded"]
     list_editable = ["responded"]
     search_fields = ["name", "email", "message"]
-    def get_readonly_fields(self, request, obj=None):
-        return [field.name for field in obj._meta.get_fields()]
 
     def respond(self, obj):
         if not obj.responded:
@@ -65,6 +65,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
 class BloodFormSubmissionAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'appointment_date')
     search_fields = ('first_name', 'last_name', 'email')
+    actions = ['send_appointment_email']
 
     def display_file(self, obj):
         if obj.prescription:
@@ -74,10 +75,21 @@ class BloodFormSubmissionAdmin(admin.ModelAdmin):
             return format_html('<a href="{}" target="_blank">Download</a>', file_url)
         return "No file"
     display_file.short_description = 'File'
-
-    def get_readonly_fields(self, request, obj=None):
-        return [field.name for field in obj._meta.get_fields()]
     
+    def send_appointment_email(self, request, queryset):
+        for submission in queryset:
+            subject = 'Appointment Confirmation'
+            message = f'Dear {submission.first_name} {submission.last_name},\n\n' \
+                      f'This is a confirmation for your appointment on {submission.appointment_date}.\n\n' \
+                      f'Thank you for choosing our service.'
+            recipient_list = [submission.email]
+            connection = get_connection()
+            connection.ssl_context = settings.EMAIL_SSL_CONTEXT
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL,recipient_list,connection=connection)
+
+        self.message_user(request, f"Emails sent to {queryset.count()} users successfully.", messages.SUCCESS)
+
+    send_appointment_email.short_description = 'Send appointment confirmation email to selected users'
 
 
 @admin.register(Test)
